@@ -1,0 +1,9 @@
+Flask==0.10
+Jinja2==2.7.2
+Werkzeug==0.9.4
+gunicorn==19.3.0
+requests==2.3.0
+mysql-python
+beautifulsoup4
+ws4py
+selenium
