@@ -8,7 +8,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import Select
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import NoAlertPresentException
-import unittest, time, re, config
+import unittest, time, re, config, os
 
 class Ip(unittest.TestCase):
     def test_ip(self):
@@ -17,14 +17,11 @@ class Ip(unittest.TestCase):
         driver.get(config.baseurl + "/")
         driver.implicitly_wait(30)
         driver.switch_to_window(driver.window_handles[0])
-        driver.find_element_by_link_text(u"用户登录/退出").click()
         driver.find_element_by_id("name").clear()
         driver.find_element_by_id("name").send_keys(config.user)
         driver.find_element_by_id("password").clear()
         driver.find_element_by_id("password").send_keys(config.passwd)
         driver.find_element_by_id("sign").click()
-        driver.implicitly_wait(30)
-        driver.find_element_by_link_text(u"首页").click()
         #监控portal页面
         driver.find_element_by_link_text(u"监控配置").click()
         driver.implicitly_wait(30)
@@ -33,9 +30,11 @@ class Ip(unittest.TestCase):
         #新建IP,自动获取对应地区isp信息
         driver.find_element_by_id("ip_name").clear()
         driver.find_element_by_id("ip_name").send_keys(config.ip)
+        driver.find_element_by_id("description").clear()
+        driver.find_element_by_id("description").send_keys(u"测试用")
         driver.find_element_by_css_selector("div.pull-right > button.btn.btn-default").click()
         #精确搜索ip
-        driver.find_element_by_link_text("Ip").click()
+        driver.find_element_by_link_text("IP管理").click()
         time.sleep(2)
         driver.find_element_by_id("query").clear()
         driver.find_element_by_id("query").send_keys(config.ip)
@@ -50,13 +49,15 @@ class Ip(unittest.TestCase):
         except Exception, e:
             print e
             print "insert and search fail"
+            driver.quit()
+            os._exit(0)
         #修改ip信息
         driver.find_element_by_xpath("html/body/div[1]/table/tbody/tr[1]/td[9]/a/span").click()
         driver.find_element_by_id("isp").clear()
         driver.find_element_by_id("isp").send_keys(u"华数")
         driver.find_element_by_css_selector("button.btn.btn-default").click()
         time.sleep(2)
-        driver.find_element_by_link_text("Ip").click()
+        driver.find_element_by_link_text("IP管理").click()
         time.sleep(2)
         driver.find_element_by_id("query").clear()
         driver.find_element_by_id("query").send_keys(config.ip)
@@ -87,7 +88,7 @@ class Ip(unittest.TestCase):
             print "delete fail"
         #退出登录
         driver.switch_to_window(driver.window_handles[0])
-        driver.implicitly_wait(30)
+        time.sleep(2)
         driver.find_element_by_link_text(u"用户登录/退出").click()
         driver.find_element_by_link_text(u"退出").click()
         driver.quit()
