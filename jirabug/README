@@ -1,0 +1,4 @@
+#安装依赖
+pip install -r pip_requriement.txt
+#运行web.py启动，端口默认为8080，可修改，route地址可自己修改
+#config中配置了jql，可自行定义
